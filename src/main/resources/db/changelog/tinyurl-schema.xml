@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="01" author="Aravind">
+        <createTable tableName="tinyurls"
+                     remarks="Add tinyurl for each client long urls">
+            <column name="tiny_id" type="long" autoIncrement="true">
+                <constraints nullable="false" unique="true" primaryKey="true"/>
+            </column>
+            <column name="tinyurl" type="varchar(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="client_id" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdBy" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedBy" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdTime" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedTime" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="client" type="long">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- for manual rollback
+        <rollback>
+          <dropTable tableName="clients"/>
+        </rollback>
+        -->
+
+        <createTable tableName="clients"
+                     remarks="client data">
+            <column name="client_id" type="long" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="client_name" type="varchar(500)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total_urls" type="int">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="createdBy" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedBy" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="createdTime" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updatedTime" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="tinyurls" baseColumnNames="client"
+                                 constraintName="client_fk"
+                                 referencedTableName="clients" referencedColumnNames="client_id"/>
+    </changeSet>
+</databaseChangeLog>

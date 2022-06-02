@@ -1,6 +1,9 @@
 package com.project.tinyurl.controller;
 
 import com.project.tinyurl.domain.TinyUrl;
+import com.project.tinyurl.domain.TinyUrlRequest;
+import com.project.tinyurl.domain.TinyUrlResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -8,10 +11,11 @@ import org.springframework.web.bind.annotation.*;
 public class TinyurlController {
 
     @PostMapping(value = "/data/shorten")
-    public void addShorten(@RequestBody TinyUrl tinyUrl){
+    public ResponseEntity<TinyUrlResponse> addShorten(@RequestBody TinyUrlRequest tinyUrlRequest){
         /*
 
          */
+        return null;
 
     }
 
