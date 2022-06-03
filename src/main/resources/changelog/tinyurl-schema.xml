@@ -9,7 +9,7 @@
     <changeSet id="01" author="Aravind">
         <createTable tableName="tinyurls"
                      remarks="Add tinyurl for each client long urls">
-            <column name="tiny_id" type="long" autoIncrement="true">
+            <column name="tiny_id" type="bigint" autoIncrement="true">
                 <constraints nullable="false" unique="true" primaryKey="true"/>
             </column>
             <column name="tinyurl" type="varchar(255)">
@@ -30,7 +30,7 @@
             <column name="updatedTime" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column name="client" type="long">
+            <column name="client" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -43,7 +43,7 @@
 
         <createTable tableName="clients"
                      remarks="client data">
-            <column name="client_id" type="long" autoIncrement="true">
+            <column name="client_id" type="bigint" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="client_name" type="varchar(500)">
