@@ -2,6 +2,8 @@ package com.project.tinyurl.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import liquibase.integration.spring.SpringLiquibase;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,10 +22,10 @@ public class DataBaseConfig {
     }
 
     @Bean
+    @ConfigurationProperties(prefix = "tinyurl.db")
     public DataSource dataSource(){
-        HikariDataSource hikariDataSource = new HikariDataSource();
-       // hikariDataSource.
-        return hikariDataSource;
+
+        return DataSourceBuilder.create().type(HikariDataSource.class).build();
     }
 
 
