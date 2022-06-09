@@ -15,23 +15,23 @@
             <column name="tinyurl" type="varchar(255)">
                 <constraints nullable="false" unique="true"/>
             </column>
-            <column name="client_id" type="int">
+            <column name="url" type="varchar(2000)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="client" type="int">
                 <constraints nullable="false"/>
             </column>
             <column name="createdBy" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="updatedBy" type="varchar(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="true"/>
             </column>
             <column name="createdTime" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column name="updatedTime" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="client" type="bigint">
-                <constraints nullable="false"/>
+            <column name="updatedTime" type="TIMESTAMP" >
+                <constraints nullable="true"/>
             </column>
         </createTable>
 
@@ -62,8 +62,8 @@
             <column name="createdTime" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column name="updatedTime" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
+            <column name="updatedTime" type="TIMESTAMP" >
+                <constraints nullable="true"/>
             </column>
         </createTable>
 

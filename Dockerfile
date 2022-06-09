@@ -24,3 +24,4 @@ ENTRYPOINT ["java","-jar","app.jar"]
 
 #docker inspect 3b686a6e857c | grep IPAddress
 
+# docker run -p 8082:8082 app1

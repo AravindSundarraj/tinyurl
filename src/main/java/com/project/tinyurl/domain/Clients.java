@@ -9,14 +9,11 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 @NoArgsConstructor
-public class TinyUrl {
-    private String tinyurl;
-    private String url;
-    private int client;
+public class Clients {
+    private String clientName;
+    private int totalUrls;
     private String createdBy;
     private String updatedBy;
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
-
-
 }
