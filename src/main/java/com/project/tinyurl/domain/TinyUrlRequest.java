@@ -7,6 +7,6 @@ import lombok.Setter;
 @Getter
 public class TinyUrlRequest {
 
-    String ClientName;
+    String clientName;
     String url;
 }

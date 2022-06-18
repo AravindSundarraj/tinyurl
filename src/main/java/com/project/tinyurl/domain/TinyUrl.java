@@ -3,20 +3,34 @@ package com.project.tinyurl.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-@Setter
+
 @Getter
-@NoArgsConstructor
+@Setter
+@ToString
 public class TinyUrl {
-    private String tinyurl;
+    private String turl;
     private String url;
-    private int client;
+    private String client;
     private String createdBy;
     private String updatedBy;
     private LocalDateTime createdTime;
     private LocalDateTime updatedTime;
+
+    private TinyUrl(String turl,String url,String client,String createdBy){
+        this.client = client;
+        this.turl = turl;
+        this.url = url;
+        this.createdBy = createdBy;
+    }
+
+    public static TinyUrl createTinyObject(String turl,String url,String clientName){
+
+       return new TinyUrl(turl,url,clientName,"ADMIN");
+    }
 
 
 }

@@ -3,9 +3,10 @@ package com.project.tinyurl.service.impl;
 import com.project.tinyurl.service.ConversionI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.util.zip.CRC32;
-
+@Service
 public class Hashing implements ConversionI {
 
     private static Logger log = LoggerFactory.getLogger("Hashing");
