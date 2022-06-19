@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @Mapper
 public interface TinyUrlDaoI {
 
-      @Select("SELECT url FROM tinyurl WHERE turl = #{tinyUrl}")
-      String getClientUrl(@Param("tinyurl") String tinyUrl);
+      @Select("SELECT url FROM tinyurl WHERE turl = #{turl}")
+      String getClientUrl(@Param("turl") String turl);
       @Insert("insert into tinyurl (turl,url,client,created_by)  values(#{turl}," +
               "#{url},#{client},#{createdBy})")
       void addUrl(TinyUrl tinyurl);

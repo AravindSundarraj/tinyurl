@@ -42,8 +42,11 @@ public class TinyurlController {
     }
 
     @GetMapping(value = "/{shortUrl}")
-    public void getShorturl(@PathVariable String shortUrl){
-
+    public void getOriginalUrl(@PathVariable String shortUrl , HttpServletResponse response)throws Exception{
+        log.info("retrieve original url for shortUrl = {}",shortUrl);
+        String url = tinyUrlService.retrieveUrl(shortUrl);
+        log.info("return original-url={} for tiny-url={}",url,shortUrl);
+        response.sendRedirect(url);
     }
 
     @GetMapping(value = "/{testDirect}")

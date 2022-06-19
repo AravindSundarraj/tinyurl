@@ -5,11 +5,13 @@ import com.project.tinyurl.dao.TinyUrlDaoI;
 import com.project.tinyurl.domain.Clients;
 import com.project.tinyurl.domain.TinyUrl;
 import com.project.tinyurl.domain.TinyUrlResponse;
+import com.project.tinyurl.exception.TinyUrlException;
 import com.project.tinyurl.service.ConversionI;
 import com.project.tinyurl.service.TinyUrlService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,16 +27,16 @@ public class TinyUrlServiceImpl implements TinyUrlService {
     TinyUrlDaoI tinyUrlDaoI;
     @Autowired
     ConversionI conversionI;
+    @Value("${default.url}")
+    private String defaultUrl;
 
     @Transactional
     @Override
     public TinyUrlResponse addUrl(String url, String client) {
        String turl = conversionI.exec(url,client);
-       turl = "http://localhost:8082/v1/api/".concat(turl);
+       turl = defaultUrl.concat(turl);
 
         log.info("Generated tiny-url = {} for client={} , original-url={}",turl , client,url);
-/*        long clientId = getClient(client);
-        if(Objects.isNull(clientId))*/
         addNewClient(client);
         tinyUrlDaoI.addUrl(TinyUrl.createTinyObject(turl,url,client));
 
@@ -56,7 +58,14 @@ public class TinyUrlServiceImpl implements TinyUrlService {
         return Objects.nonNull(clt)? clt.getClientId() : 0;
     }
 
-/*    public String getClientUrl(String tinyUrl){
-       // clientDaoI.getClient()
-    }*/
+    @Override
+    public String retrieveUrl(String tinyurl) {
+       String tUrl =  tinyUrlDaoI.getClientUrl(tinyurl);
+       if(Objects.isNull(tUrl)){
+           throw new TinyUrlException(tinyurl.concat("tiny-url does not exist "));
+       }
+       return  tUrl;
+
+    }
+
 }
