@@ -11,10 +11,13 @@ public interface ClientDaoI {
             "#{totalUrls},#{createdBy})")
     void addClient(Clients client);
 
-    @Select("SELECT * FROM TINYURLS WHERE tinyurl = #{tinyUrl}")
+    @Select("select client_name,total_urls from clients where client_name=#{clientName}")
+    @Results(value = {
+            @Result(property = "clientName", column = "client_name"),
+            @Result(property="totalUrls", column = "total_urls"),
+    })
     Clients getClient(@Param("clientName") String clientName);
 
-    @Update("update clients set total_urls=#{totalUrls} where ")
-    //@Select("SELECT * FROM clients WHERE tinyurl = #{tinyUrl}")
-    Clients updateClient(@Param("clientName") String clientName);
+    @Update("update clients set total_urls=#{totalUrls} where client_name=#{clientName}")
+    int updateClient(@Param("clientName") String clientName , @Param("totalUrls") int totalUrls);
 }

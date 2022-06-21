@@ -24,9 +24,10 @@ public class Hashing implements ConversionI {
         CRC32 crc = new CRC32();
         crc.update(url.getBytes());
         String s = String.valueOf(crc.getValue());
+        s = s.substring(0,7);
         log.info("Hashed for client={} , url={} , hash={} ", client, url, crc.getValue());
-        bloomFilterService.contains(crc.getValue(), 0);
-        return String.valueOf(crc.getValue());
+        Long longs = bloomFilterService.contains(Long.parseLong(s), 0);
+        return String.valueOf(longs);
 
     }
 }

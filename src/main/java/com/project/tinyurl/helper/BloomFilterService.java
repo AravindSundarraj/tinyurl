@@ -20,15 +20,17 @@ public class BloomFilterService {
 
 
    public void addValue(Long o){
-       log.info("Add to Filter = {} " , o);
+       log.info("Add to Bloom-Filter = {} " , o);
        filter.put(o);
    }
 
    public Long contains(Long o, int suffix){
        if(!filter.mightContain(o)){
-           addValue(o);
-           return o;
+         Long v =  Long.parseLong(String.valueOf(o).concat(String.valueOf(suffix)));
+           addValue(v);
+           return v;
        }
+       log.info("Bloom Filter - Hash already exist {} continue.." , o);
        suffix = suffix + 1;
       Long ll = Long.parseLong(String.valueOf(o).concat(String.valueOf(suffix)));
        return contains(ll , suffix);

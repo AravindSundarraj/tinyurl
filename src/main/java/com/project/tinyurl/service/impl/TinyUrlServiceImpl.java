@@ -5,6 +5,7 @@ import com.project.tinyurl.dao.TinyUrlDaoI;
 import com.project.tinyurl.domain.Clients;
 import com.project.tinyurl.domain.TinyUrl;
 import com.project.tinyurl.domain.TinyUrlResponse;
+import com.project.tinyurl.exception.ClientExistException;
 import com.project.tinyurl.exception.TinyUrlException;
 import com.project.tinyurl.service.ConversionI;
 import com.project.tinyurl.service.TinyUrlService;
@@ -33,38 +34,47 @@ public class TinyUrlServiceImpl implements TinyUrlService {
     @Transactional
     @Override
     public TinyUrlResponse addUrl(String url, String client) {
-       String turl = conversionI.exec(url,client);
-       turl = defaultUrl.concat(turl);
+        String turl = null;
 
-        log.info("Generated tiny-url = {} for client={} , original-url={}",turl , client,url);
-        addNewClient(client);
-        tinyUrlDaoI.addUrl(TinyUrl.createTinyObject(turl,url,client));
+        turl = conversionI.exec(url, client);
+        turl = defaultUrl.concat(turl);
+        Clients cls = clientDaoI.getClient(client);
+        log.info("client = {} exist update the client  count = {} ", client, cls.getTotalUrls() + 1);
+        if (Objects.nonNull(cls)) {
+            log.info("client = {} exist update the client  count = {} ", client, cls.getTotalUrls() + 1);
+            clientDaoI.updateClient(client, cls.getTotalUrls() + 1);
+        } else {
+            addNewClient(client);
+        }
+        log.info("Generated tiny-url = {} for client={} , original-url={}", turl, client, url);
+        tinyUrlDaoI.addUrl(TinyUrl.createTinyObject(turl, url, client));
 
-        return TinyUrlResponse.getTinyUrl(turl,url,client);
+
+        return TinyUrlResponse.getTinyUrl(turl, url, client);
     }
 
-    private void addNewClient(String client){
-        try{
-            clientDaoI.addClient(Clients.createClient(client , 1));
-        }
-        catch(Exception ex){
-            log.error("client = {} already exist update the url count",client , ex);
+    private void addNewClient(String client) {
+        try {
+            clientDaoI.addClient(Clients.createClient(client, 1));
+        } catch (Exception ex) {
+            log.error("client = {} already exist update the url count", client, ex);
+            throw new ClientExistException("Client URL Exist **********");
         }
     }
 
     @Override
     public long getClient(String client) {
         Clients clt = clientDaoI.getClient(client);
-        return Objects.nonNull(clt)? clt.getClientId() : 0;
+        return Objects.nonNull(clt) ? clt.getClientId() : 0;
     }
 
     @Override
     public String retrieveUrl(String tinyurl) {
-       String tUrl =  tinyUrlDaoI.getClientUrl(tinyurl);
-       if(Objects.isNull(tUrl)){
-           throw new TinyUrlException(tinyurl.concat("tiny-url does not exist "));
-       }
-       return  tUrl;
+        String tUrl = tinyUrlDaoI.getClientUrl(tinyurl);
+        if (Objects.isNull(tUrl)) {
+            throw new TinyUrlException(tinyurl.concat("tiny-url does not exist "));
+        }
+        return tUrl;
 
     }
 
