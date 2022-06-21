@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,32 +29,28 @@ public class TinyurlController {
     @Autowired
     TinyUrlService tinyUrlService;
 
+    @Value("${default.url}")
+    private String defaultUrl;
+
     private static Logger log = LoggerFactory.getLogger("TinyurlController");
     @PostMapping(value = "/data/shorten")
     public ResponseEntity<TinyUrlResponse> addShorten(@RequestBody TinyUrlRequest tinyUrlRequest){
         log.info("Add-TinyUrl = {} , ClientName = {} ", tinyUrlRequest.getUrl(),tinyUrlRequest.getClientName());
         TinyUrlResponse tinyUrlResponse =  tinyUrlService.addUrl(tinyUrlRequest.getUrl(),tinyUrlRequest.getClientName());
-        /*
-
-         */
         log.info(" TinyUrl = {} , ClientName = {} Added Successfully", tinyUrlRequest.getUrl(),tinyUrlRequest.getClientName());
         return new ResponseEntity<>(tinyUrlResponse , HttpStatus.CREATED);
 
     }
 
     @GetMapping(value = "/{shortUrl}")
-    public void getOriginalUrl(@PathVariable String shortUrl , HttpServletResponse response)throws Exception{
-        log.info("retrieve original url for shortUrl = {}",shortUrl);
-        String url = tinyUrlService.retrieveUrl(shortUrl);
-        log.info("return original-url={} for tiny-url={}",url,shortUrl);
+    public void getOriginalUrl(@PathVariable("shortUrl") String shortUrl , HttpServletResponse response)throws Exception{
+        String cUrl = defaultUrl.concat(shortUrl);
+        log.info("retrieve original url for shortUrl = {}",cUrl);
+        String url = tinyUrlService.retrieveUrl(cUrl);
+        log.info("return original-url={} for tiny-url={}",url,cUrl);
         response.sendRedirect(url);
     }
 
-    @GetMapping(value = "/{testDirect}")
-    public void testRedirect(){
-        log.info("Test Status 302 --- ");
-
-    }
 
 /*    @RequestMapping(value = "/redirect", method = RequestMethod.GET)
     public void method(HttpServletResponse httpServletResponse) {
@@ -70,18 +67,18 @@ public class TinyurlController {
         return redirectView;
     }*/
 
-    @GetMapping(value = "/redirect")
+/*    @GetMapping(value = "/redirect")
     public void handleRedirect(HttpServletResponse response) throws URISyntaxException, IOException {
 
-/*        response.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
+*//*        response.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
         response.setHeader("Location", "http://localhost:8085/celebrity/test");
 
         URI uri = new URI("http://localhost:8085/celebrity/test");
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(uri);*/
+        httpHeaders.setLocation(uri);*//*
       //  response.se
         response.setStatus(307);
         response.sendRedirect("https://stackoverflow.com/questions/68050824/rest-post-api-retrieve-result-from-tinyurl-method");
         //return new ResponseEntity<>(httpHeaders, MOVED_PERMANENTLY);
-    }
+    }*/
 }

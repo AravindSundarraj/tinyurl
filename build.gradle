@@ -33,6 +33,10 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 // https://mvnrepository.com/artifact/org.postgresql/postgresql
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.3.5'
+	// https://mvnrepository.com/artifact/com.google.guava/guava
+	implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
+
+
 
 
 }
