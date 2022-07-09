@@ -36,7 +36,10 @@ dependencies {
 	// https://mvnrepository.com/artifact/com.google.guava/guava
 	implementation group: 'com.google.guava', name: 'guava', version: '31.1-jre'
 	// https://mvnrepository.com/artifact/redis.clients/jedis
-	implementation group: 'redis.clients', name: 'jedis', version: '4.2.3'
+	//implementation group: 'redis.clients', name: 'jedis', version: '4.2.3'
+	// https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus
+	implementation group: 'io.micrometer', name: 'micrometer-registry-prometheus', version: '1.9.1'
+
 
 
 
