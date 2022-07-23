@@ -11,17 +11,17 @@ ARG JAR_FILE=build/libs/*.jar
 #WORKDIR /opt/app
 
 # cp target/*.jar /opt/app/app.jar
-COPY ${JAR_FILE} app.jar
-EXPOSE 8080
+COPY ${JAR_FILE} arav-tinyurl.jar
+EXPOSE 8082
 
 # java -jar /opt/app/app.jar
-ENTRYPOINT ["java","-jar","app.jar"]
+ENTRYPOINT ["java","-jar","arav-tinyurl.jar"]
 
 
 # docker build . -t app1
 # docker image rm -f app1
 # docker container ls
 
-#docker inspect 3b686a6e857c | grep IPAddress
+#docker inspect 78c8b35a7ae0 | grep IPAddress
 
 # docker run -p 8082:8082 app1

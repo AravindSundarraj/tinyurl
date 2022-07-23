@@ -4,6 +4,8 @@ import com.project.tinyurl.domain.TinyUrl;
 import com.project.tinyurl.domain.TinyUrlRequest;
 import com.project.tinyurl.domain.TinyUrlResponse;
 import com.project.tinyurl.service.TinyUrlService;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.prometheus.PrometheusMeterRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +31,15 @@ public class TinyurlController {
     @Autowired
     TinyUrlService tinyUrlService;
 
+
+
     @Value("${default.url}")
     private String defaultUrl;
 
     private static Logger log = LoggerFactory.getLogger("TinyurlController");
     @PostMapping(value = "/data/shorten")
     public ResponseEntity<TinyUrlResponse> addShorten(@RequestBody TinyUrlRequest tinyUrlRequest){
+
         log.info("Add-TinyUrl = {} , ClientName = {} ", tinyUrlRequest.getUrl(),tinyUrlRequest.getClientName());
         TinyUrlResponse tinyUrlResponse =  tinyUrlService.addUrl(tinyUrlRequest.getUrl(),tinyUrlRequest.getClientName());
         log.info(" TinyUrl = {} , ClientName = {} Added Successfully", tinyUrlRequest.getUrl(),tinyUrlRequest.getClientName());
