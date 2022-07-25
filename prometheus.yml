@@ -13,4 +13,4 @@ scrape_configs:
   - job_name: 'tiny-url-app'
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ['tinyurl:8080']
+      - targets: ['tinyurl:8082']

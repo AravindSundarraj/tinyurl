@@ -31,7 +31,8 @@ public class TinyurlController {
     @Autowired
     TinyUrlService tinyUrlService;
 
-
+    @Autowired
+    MeterRegistry tinyUrlMetric;
 
     @Value("${default.url}")
     private String defaultUrl;
@@ -56,34 +57,4 @@ public class TinyurlController {
         response.sendRedirect(url);
     }
 
-
-/*    @RequestMapping(value = "/redirect", method = RequestMethod.GET)
-    public void method(HttpServletResponse httpServletResponse) {
-        httpServletResponse.setHeader("Location", "http://localhost:8085/celebrity/test");
-        httpServletResponse.setStatus(302);
-    }*/
-
-   /* @RequestMapping(value = "/redirect", method=RequestMethod.POST)
-    public RedirectView redirectUrl( HttpServletRequest request, HttpServletResponse response)  {
-      //  log.debug("Received shortened url to redirect: " + id);
-      //  String redirectUrlString = urlConverterService.getLongURLFromID(id);
-        RedirectView redirectView = new RedirectView();
-        redirectView.setUrl("http://localhost:8085/celebrity/test");
-        return redirectView;
-    }*/
-
-/*    @GetMapping(value = "/redirect")
-    public void handleRedirect(HttpServletResponse response) throws URISyntaxException, IOException {
-
-*//*        response.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
-        response.setHeader("Location", "http://localhost:8085/celebrity/test");
-
-        URI uri = new URI("http://localhost:8085/celebrity/test");
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(uri);*//*
-      //  response.se
-        response.setStatus(307);
-        response.sendRedirect("https://stackoverflow.com/questions/68050824/rest-post-api-retrieve-result-from-tinyurl-method");
-        //return new ResponseEntity<>(httpHeaders, MOVED_PERMANENTLY);
-    }*/
 }

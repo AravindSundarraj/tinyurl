@@ -22,6 +22,6 @@ ENTRYPOINT ["java","-jar","arav-tinyurl.jar"]
 # docker image rm -f app1
 # docker container ls
 
-#docker inspect 78c8b35a7ae0 | grep IPAddress
+#docker inspect 5741fdcf3ccd | grep IPAddress
 
 # docker run -p 8082:8082 app1

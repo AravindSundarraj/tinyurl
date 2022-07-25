@@ -68,7 +68,7 @@ public class TinyUrlServiceImpl implements TinyUrlService {
 
     @PostConstruct
     private void initCounters() {
-        tinyUrlCounter = Counter.builder("tinyurl.count")  .tags()
+        tinyUrlCounter = Counter.builder("total.tinyurl.count")  .tags()
                 // 2- create a counter using the fluent API
                 .tag("type", "tinyurl-count")
                 .description("The number of tinyurl-count ever placed on tiny site")
@@ -80,7 +80,7 @@ public class TinyUrlServiceImpl implements TinyUrlService {
                 .register(tinyUrlMetric);
 
         timerCounter = Timer.builder("client.timer.count")
-                .tag("type","tiny-url-average-count").description("get the cound in average")
+                .tag("type","tiny-url-average-count").description("get the count in average")
                 .register(tinyUrlMetric);
 
 

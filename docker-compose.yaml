@@ -8,12 +8,16 @@ services:
       POSTGRES_USER: username
       POSTGRES_PASSWORD: password
       POSTGRES_DB: tinyurl_DB
+    networks:
+      - tiny-url-network
   prometheus:
     image: prom/prometheus:latest
     ports:
       - "9090:9090"
     volumes:
-      - ./prometheus.yml:/Users/aravindsundarraj/studying/docker/prometheus.yml
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - tiny-url-network
   grafana:
     image: "grafana/grafana:latest"
     ports:
@@ -23,11 +27,18 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=password
     depends_on:
       - prometheus
+    networks:
+      - tiny-url-network
   tinyurl:
-    image: aravindssr/arav:tinyurl.7.0
+    image: aravindssr/arav:tinyurl.12.0
     ports:
       - "8082:8082"
     depends_on:
       - database
       - prometheus
       - grafana
+    networks:
+      - tiny-url-network
+
+networks:
+   tiny-url-network:

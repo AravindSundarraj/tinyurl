@@ -10,13 +10,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MetricConfiguration {
 
-/*    @Configuration(proxyBeanMethods = false)
-    public class MyMeterRegistryConfiguration {
-
-        @Bean
-        public MeterRegistryCustomizer<PrometheusMeterRegistry> prometheusMeterRegistry() {
-            return (registry) -> registry.config().namingConvention(this::name);
-        }*/
 
     @Bean(name="tinyUrlMetric")
     public MeterRegistry meterRegistry(){
