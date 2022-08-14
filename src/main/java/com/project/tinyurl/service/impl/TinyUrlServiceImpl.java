@@ -17,6 +17,7 @@ import io.micrometer.core.instrument.distribution.DistributionStatisticConfig;
 import io.micrometer.core.instrument.distribution.Histogram;
 import io.prometheus.client.CollectorRegistry;
 //import io.prometheus.client.Histogram;
+import org.postgresql.util.PSQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -43,14 +46,12 @@ public class TinyUrlServiceImpl implements TinyUrlService {
     private String defaultUrl;
 
 
-    private Counter clientCounter;
-    private Counter tinyUrlCounter;
-    //io.micrometer.core.instrument
-    private Timer timerCounter;
+    private Counter exceptionCounter;
 
     @Autowired
     MeterRegistry tinyUrlMetric;
 
+    private Map<String,Counter> counters = new HashMap<>();
 
    // private PrometheusHistogram prometheusHistogram;
 
@@ -68,21 +69,30 @@ public class TinyUrlServiceImpl implements TinyUrlService {
 
     @PostConstruct
     private void initCounters() {
-        tinyUrlCounter = Counter.builder("total.tinyurl.count")  .tags()
+        System.out.println("create -- index");
+        exceptionCounter = Counter.builder("total.tinyurl.exception.count")
                 // 2- create a counter using the fluent API
-                .tag("type", "tinyurl-count")
-                .description("The number of tinyurl-count ever placed on tiny site")
+                .tag("type", "tinyurlException")
+                .description("The number of tinyurl-count exception occurred")
                 .register(tinyUrlMetric);
 
-        clientCounter = Counter.builder("client.count")
-                .tag("type", "clientCounter")
-                .description("Number of Client in tiny-url")
-                .register(tinyUrlMetric);
 
-        timerCounter = Timer.builder("client.timer.count")
-                .tag("type","tiny-url-average-count").description("get the count in average")
-                .register(tinyUrlMetric);
+    }
 
+
+    public void increment(String clientName){
+
+        Counter counter = counters.get(clientName);
+
+        if(counter == null) {
+
+            counter = Counter.builder("tinyurl.clients.count").tags("clientName", clientName).register(tinyUrlMetric);
+
+            counters.put(clientName, counter);
+
+        }
+
+        counter.increment();
 
     }
 
@@ -91,22 +101,26 @@ public class TinyUrlServiceImpl implements TinyUrlService {
     public TinyUrlResponse addUrl(String url, String client) {
         //timerCounter.
         String turl = null;
+        try {
+            turl = conversionI.exec(url, client);
+            turl = defaultUrl.concat(turl);
+            Clients cls = clientDaoI.getClient(client);
+            if (Objects.nonNull(cls)) {
+                log.info("client = {} exist update the client  count = {} ", client, cls.getTotalUrls() + 1);
+                clientDaoI.updateClient(client, cls.getTotalUrls() + 1);
+            } else {
+                addNewClient(client);
 
-        turl = conversionI.exec(url, client);
-        turl = defaultUrl.concat(turl);
-        Clients cls = clientDaoI.getClient(client);
-        if (Objects.nonNull(cls)) {
-            log.info("client = {} exist update the client  count = {} ", client, cls.getTotalUrls() + 1);
-            clientDaoI.updateClient(client, cls.getTotalUrls() + 1);
-        } else {
-            addNewClient(client);
-            clientCounter.increment();
+            }
+            log.info("Generated tiny-url = {} for client={} , original-url={}", turl, client, url);
+            tinyUrlDaoI.addUrl(TinyUrl.createTinyObject(turl, url, client));
+            increment(client);
         }
-        log.info("Generated tiny-url = {} for client={} , original-url={}", turl, client, url);
-        tinyUrlDaoI.addUrl(TinyUrl.createTinyObject(turl, url, client));
-
-        tinyUrlCounter.increment();
-
+        catch(Exception ex){
+            exceptionCounter.increment();
+            log.error("Tinyurl service exception {}" , ex);
+            throw ex;
+        }
         return TinyUrlResponse.getTinyUrl(turl, url, client);
     }
 

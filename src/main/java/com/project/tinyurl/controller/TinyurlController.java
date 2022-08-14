@@ -31,8 +31,6 @@ public class TinyurlController {
     @Autowired
     TinyUrlService tinyUrlService;
 
-    @Autowired
-    MeterRegistry tinyUrlMetric;
 
     @Value("${default.url}")
     private String defaultUrl;
